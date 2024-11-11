@@ -41,6 +41,7 @@ class UploadThingProviderService extends AbstractFileProviderService {
             ),
         ]);
         if (response[0].error) {
+            this.logger_.error(response[0].error.message);
             throw new Error(response[0].error.message);
         }
         return Promise.resolve({
@@ -52,6 +53,7 @@ class UploadThingProviderService extends AbstractFileProviderService {
     async delete(file: ProviderDeleteFileDTO): Promise<void> {
         const response = await this.client.deleteFiles([file.fileKey]);
         if (response.deletedCount === 0) {
+            this.logger_.error(`File with key ${file.fileKey} not found`);
             throw new Error(`File with key ${file.fileKey} not found`);
         }
         return Promise.resolve();
